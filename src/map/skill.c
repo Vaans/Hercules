@@ -12306,6 +12306,7 @@ static int skill_castend_pos2(struct block_list *src, int x, int y, uint16 skill
 		case SU_CN_POWDERING:
 		case SU_SV_ROOTTWIST:
 		case SJ_BOOKOFCREATINGSTAR:
+		case NPC_VENOMFOG:
 			flag |= 1; // Set flag to 1 to prevent deleting ammo (it will be deleted on group-delete).
 			FALLTHROUGH
 		case GS_GROUNDDRIFT: //Ammo should be deleted right away.
@@ -14382,6 +14383,7 @@ static int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *b
 		case UNT_PSYCHIC_WAVE:
 		case UNT_MAGMA_ERUPTION:
 		case UNT_MAKIBISHI:
+		case UNT_VENOMFOG:
 			skill->attack(skill->get_type(sg->skill_id, sg->skill_lv), ss, &src->bl, bl, sg->skill_id, sg->skill_lv, tick, 0);
 			break;
 
