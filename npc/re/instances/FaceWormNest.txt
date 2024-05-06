@@ -568,7 +568,7 @@ OnTimer1111:
 	.@mapcount = getmapusers('map_name$);
 	if (.@mapcount < 1){
 		setunitdata('BOSS[1], UDT_MAXHP, 5000000);
-		setunitdata('BOSS[1], UDT_HP, 5000000;)
+		setunitdata('BOSS[1], UDT_HP, 5000000);
 	}else if (rand(1,(22-.@mapcount)) < 17) {
 		getunitdata('BOSS[1], .@arr);
 		if (.@arr[UDT_HP] > 3000000 && .@arr[UDT_HP] < 4900000)
