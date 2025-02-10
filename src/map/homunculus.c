@@ -2,7 +2,7 @@
  * This file is part of Hercules.
  * http://herc.ws - http://github.com/HerculesWS/Hercules
  *
- * Copyright (C) 2012-2024 Hercules Dev Team
+ * Copyright (C) 2012-2025 Hercules Dev Team
  * Copyright (C) Athena Dev Teams
  *
  * Hercules is free software: you can redistribute it and/or modify
@@ -124,7 +124,7 @@ static void homunculus_addspiritball(struct homun_data *hd, int max)
 	else
 		hd->homunculus.spiritball++;
 
-	clif->spiritball(&hd->bl, BALL_TYPE_NONE, AREA);
+	clif->spiritballs(&hd->bl, hd->homunculus.spiritball, AREA);
 }
 
 static void homunculus_delspiritball(struct homun_data *hd, int count, int type)
@@ -144,7 +144,7 @@ static void homunculus_delspiritball(struct homun_data *hd, int count, int type)
 
 	hd->homunculus.spiritball -= count;
 	if (!type)
-		clif->spiritball(&hd->bl, BALL_TYPE_NONE, AREA);
+		clif->spiritballs(&hd->bl, hd->homunculus.spiritball, AREA);
 }
 
 static void homunculus_damaged(struct homun_data *hd)

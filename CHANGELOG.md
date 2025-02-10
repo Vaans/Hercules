@@ -22,6 +22,169 @@ If you are reading this in a text editor, simply ignore this section
 ### Removed
 -->
 
+## [v2025.01] `January 2025`
+
+### Added
+
+- Added some validation checks for unusual/suspicious whitespace in incoming chat messages. (#3335)
+
+## [v2024.11] `November 2024`
+
+### Changed
+
+- Updated mob_db2 documentation to include the `Inherit` mechanism. (#3327)
+
+### Fixed
+
+- Fixed a code comment containing misleading information. (#3327)
+- Fixed the `clang-13` build in the GitHub CI, failing due to a removed package in debian unstable. (#3333)
+
+## [v2024.10] `October 2024`
+
+### Changed
+
+- Changed the `getmobdrops()` script command to avoid the use of global temporary variables. (#3319)
+  - The caller now specifies an array that will be filled with the requested data.
+  - The amount of filled entries will be returned as the command's return value. The caller should only read up to that amount of entries from the array, as it may contain previous leftover values past that point.
+  - See the script_commands documentation for further details.
+- Improved the output of the `@mobinfo` atcommand to include item links for the mob drops, on clients that support it. Unsupported clients will gracefully fall back to just printing the names. #3328
+- Improved the output of the `@iteminfo` atcommand to include item links, on clients that support it. Unsupported clients will gracefully fall back to just printing the names. #3329
+
+## [v2024.09] `September 2024`
+
+### Added
+
+- Implemented the script command `getunitparam()` to query values defined in `unit_parameters_db.conf`, and the related `UNIT_PARAM_*` constants. See the `script_commands.txt` documentation for usage details. (#3323)
+- Added validation of the name length for configuration entries added through the HPM `addBattleConf()`, `addLoginConf()`, `addCharConf()`, `addCharInterConf()`, `addLogConf()`, `addScriptConf()` methods, to prevent silent truncation. (#3324)
+
+### Fixed
+
+- Fixed an issue causing item-granted skills that were overriding an existing skill level, not to be correctly cleared when unequipping the item. (#3322)
+- Fixed previously plagiarized skills re-appearing on subsequent logins due to the related script variables not getting cleared properly. (#3325)
+
+## [v2024.08] `August 2024`
+
+### Changed
+
+- Converted packets `CHARLOGIN_ONLINE_ACCOUNTS`, `MAPCHAR_AUTH_REQ`, `CHARLOGIN_SET_ACCOUNT_ONLINE` to the struct format. (#3304, #3312, #3314)
+- Excluded the standalone (i.e. autotrader) characters from those sent to the API server. (#3314, issue #3306)
+- Changed the `getpartymember()` script command to avoid the use of global temporary variables. (#3305, #3307, #3308, #3315)
+  - The caller now specifies an array that will be filled with the requested data.
+  - The amount of filled entries will be returned as the command's return value. The caller should only read up to that amount of entries from the array, as it may contain previous leftover values past that point.
+  - Added constants for specifying the requested data: `PT_MEMBER_NAME`, `PT_MEMBER_CHARID`, `PT_MEMBER_ACCID`.
+  - See the script_commands documentation for further details.
+  - The included scripts have been updated with the new syntax.
+- Changed the `getguildmember()` script command to avoid the use of global temporary variables. (#3310, #3311, #3318)
+  - The caller now specifies an array that will be filled with the requested data.
+  - The amount of filled entries will be returned as the command's return value. The caller should only read up to that amount of entries from the array, as it may contain previous leftover values past that point.
+  - Added constants for specifying the requested data: `GD_MEMBER_NAME`, `GD_MEMBER_CHARID`, `GD_MEMBER_ACCID`.
+  - See the script_commands documentation for further details.
+- Reduced timeout for the GitHub Actions CI builds to 30 minutes, to prevent stuck jobs from stalling the entire pipeline for too many hours. (#3317)
+
+### Fixed
+
+- Fixed a packet reading error causing the list of online characters on char and login server to desynchronize and invalidate the API server tokens. (#3304)
+- Fixed CI builds failing due to the MariaDB client attempting to connect to the server with SSL. (#3313)
+- Fixed the hwsapi commits failing because of an expired GPG key.
+- Fixed HPMDataCheck containing incomplete data because of a missing include in the headers that use the `DEFINE_PACKET_ID` macro. (#3314)
+- Updated the mapcache entry for `iz_ac02` (renewal-only content) to a 2012 version compatible with the included scripts. (#3316, issue #2809)
+- Fixed deprecation warnings in the GitHub Actions CI builds caused by the use of unsupported nodejs v16 actions. The actions have been upgraded to their nodejs v20 versions as recommended by GitHub. (#3317)
+- Fixed a deprecation warning in the GitHub Actions macOS CI builds due to a packet that was renamed. (#3317)
+
+### Deprecated
+
+- Deprecated building on GCC versions older than 7. This has been the case for at least 4 months according to the Supported Platforms rules, but this is the official deprecation warning. Support macros and workarounds will be dropped from the code at some point in the future. (#3317)
+
+### Removed
+
+- Removed GitHub Actions workflows that don't support nodejs v20. This includes the test builds for gcc-4.8, gcc-5 and gcc-6, which have been unsupported by Hercules for at least 4 months. (#3317)
+
+## [v2024.06] `June 2024`
+
+### Added
+
+- Added the `mesnavigation()` script command, to generate navi tags valid for the current packetver. (#3300)
+- Added the `mesmobspawn()` script command, to generate navi tags valid for the current packetver. (#3300)
+- Added the `mesurl()` script command, to generate clickable URL tags valid for the current packetver. (#3300)
+- Added the `mestipbox()` script command, to generate tipbox tags valid for the current packetver. (#3300)
+
+### Changed
+
+- Refactored the Plagiarism/Reproduce skill tracking logic and removed some code duplication. (part of #3298)
+- Replaced the use of hardcoded `<NAVI>` tags in scripts with `mesnavigation()` calls. (#3300)
+
+### Fixed
+
+- Fixed the copy of one's own skills via Plagiarim or Reproduce causing the skill and its requirements to be deleted. (#3298, issue #3289)
+
+## [v2024.05] `May 2024`
+
+### Changed
+
+- Implemented official ATK % calculation for `BS_OVERTHRUST` in pre-renewal. Party members only receive 5% ATK bonus. (#3293)
+
+### Fixed
+
+- Fixed a missing initialization of the (m)atk/(m)def modifiers, resulting into 0 or 1 damage. (#3293, related to #3290)
+- Fixed an incorrect call of `clif->updatestatus()` to non-player objects in relation to atk/def percent bonuses. (#3294, related to #3290)
+- Fixed a failure on SCs from skills that don't have a `StatusChange` entry in their skill db entries after a `@reloadskilldb`, such as the spirit skills. (#3296, issue #3295)
+- Fixed a compiler warning due to a missing case label when `SECURE_NPCTIMEOUT` is enabled. (#3297, issue #3197)
+
+## [v2024.04] `April 2024`
+
+### Added
+
+- Implemented `skill->get_index_sub()`, allowing to prevent error reports on the console when a skill is not found, for testing whether a skill exists in places where its absence is not an error. (#3292)
+- Implemented (m)atk/(m)def percent system: (#3290)
+  - Implemented percent atk/def/matk/mdef bonus calculation, matching the official behavior
+  - Added the `AtkPerc`, `DefPerc`, `MatkPerc`, `MdefPerc` calc flags to `sc_config.conf` to trigger recalculation of the respective stats
+  - Added atk percent bonus to the client's status window like on official servers (note: the matk percent bonus is not displayed)
+  - Added def percent bonus to the client's status window (included in the soft def)
+  - Implemented official behavior for skills/status changes that officially rely on this system (detailed below)
+- Added the script command `getitemgroupitems()` to obtain a list (without duplicates) of all items contained in a given item group (#3275)
+- Added support for the `ZC_SOULENERGY` packet for displaying soul balls, split from `ZC_SPIRITS` for new clients (#3291)
+
+### Changed
+
+- Converted handling of packets `ZC_SKILL_SELECT_REQUEST`, `CZ_SKILL_SELECT_RESPONSE` and `ZC_SPIRITS2` to the structure format. (#3292, #3291)
+- Changed the Tarot Card of Fate (`CG_TAROTCARD`) Strength (atk), The Magician (matk), The Devil (atk, matk), The Sun (atk, matk, def) bonus calculation to use the newly implemented atk/def percent system. This includes the new SCs `SC_TAROTCARD_ATK_PERC`, `SC_TAROTCARD_MATK_PERC`, `SC_TAROTCARD_DEF_PERC`. (#3290)
+- Changed the Gospel (`PA_GOSPEL`) bonus calculations to use the newly implemented atk/def percent system. This includes the new SC `SC_GOSPEL_ATK_PERC`. (#3290)
+- Changed the Provoke (`SM_PROVOKE`, `MER_PROVOKE`) SC (`SC_PROVOKE`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Concentration (`LK_CONCENTRATION`) SC (`SC_CONCENTRATION`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Bloodlust (`HAMI_BLOODLUST`) SC (`SC_HAMI_BLOODLUST`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Vital Strike (`LK_JOINTBEAT`) SC (`SC_JOINTBEAT`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Eske (`SL_SKE`) SC (`SC_SKE`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Fleeting Move (`HFLI_FLEET`) SC (`SC_HLIF_FLEET`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Curse SC (`SC_CURSE`) to use the newly implemented atk/def percent system. (#3290)
+- Changed `SC_INCATKRATE` to use the newly implemented atk/def percent system. (#3290)
+- Changed the Divest Weapon (`RG_STRIPWEAPON`) SC (`SC_NOEQUIPWEAPON`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Mind Breaker (`PF_MINDBREAKER`) SC (`SC_MINDBREAKER`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Divest Shield (`RG_STRIPSHIELD`) SC (`SC_NOEQUIPSHIELD`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Fling (`GS_FLING`) SC (`SC_FLING`) to use the newly implemented atk/def percent system. (#3290)
+- Changed the Angelus (`AL_ANGELUS`) SC (`SC_ANGELUS`) to use the newly implemented atk/def percent system. (#3290)
+- Changed Poison (`SC_POISON`) and Deadly Poison (`SC_DPOISON`) to use the newly implemented atk/def percent system. (#3290)
+- Changed Asura Strike (`MO_EXTREMITYFIST`) to ignore atk percent bonuses. (#3290)
+- Changed several functions to take or return `enum scb_flag` where appropriate. (#3290)
+- Added a compatibility workaround for `enum scb_flag` (via typedef to `e_scb_flag` and `int64_t` constants) for pre-C23 MSVC versions that don't support enum values larger than 32 bit. This is only conditionally enabled on such compilers, and will be dropped when we'll be able to switch the C standard to C23. (#3290)
+- Split handling of the spiritball clif function into `clif->spiritballs()` and `clif->soulball()`, with incompatible arguments to the old `clif->spiritball()` calls. Second argument is now the amount of spheres, instead of their type. (#3291)
+
+### Fixed
+
+- Fixed a memory leak when reloading the unit params db (#3288)
+- Fixed an assertion failure in Auto Shadow Spell when the character has no cloned or reproduced skills. (#3292)
+- Fixed Auto Shadow Spell's inability to switch to a skill with a lower skill id than the previously selected one. (#3292)
+- Fixed an assertion failure when clicking "ok" with no skills selected or clicking "cancel" in Shadow Spell. (#3292, issue #3286)
+- Fixed the value of the `flag` field of packet `ZC_SKILL_SELECT_REQUEST`, expected to be 1 (meaning auto shadow spell) rather than the amount of skills in the list. (#3292)
+- Fixed soul balls not displaying correctly in clients from 2020 onwards. (#3291)
+
+### Deprecated
+
+- Support for C99 is deprecated and will be removed soon. C11 will be the required C standard since all the officially supported compilers implement that. This is a reminder that the mainstream support for VS2019 by Microsoft ended on Apr 9 2024, making VS2022 (version 17.4 and newer) the only version we currently support officially.
+
+### Other
+
+- Work on the rebalance patch is continuing on the `rebalance` branch.
+
 ## [v2024.03] `March 2024`
 
 ### Added
@@ -3035,6 +3198,14 @@ Note: everything included in this release is part of PR #3198 which consists of 
 - New versioning scheme and project changelogs/release notes (#1853)
 
 [Unreleased]: https://github.com/HerculesWS/Hercules/compare/stable...master
+[v2025.01]: https://github.com/HerculesWS/Hercules/compare/v2024.11...v2025.01
+[v2024.11]: https://github.com/HerculesWS/Hercules/compare/v2024.10...v2024.11
+[v2024.10]: https://github.com/HerculesWS/Hercules/compare/v2024.09...v2024.10
+[v2024.09]: https://github.com/HerculesWS/Hercules/compare/v2024.08...v2024.09
+[v2024.08]: https://github.com/HerculesWS/Hercules/compare/v2024.06...v2024.08
+[v2024.06]: https://github.com/HerculesWS/Hercules/compare/v2024.05...v2024.06
+[v2024.05]: https://github.com/HerculesWS/Hercules/compare/v2024.04...v2024.05
+[v2024.04]: https://github.com/HerculesWS/Hercules/compare/v2024.03...v2024.04
 [v2024.03]: https://github.com/HerculesWS/Hercules/compare/v2024.02...v2024.03
 [v2024.02]: https://github.com/HerculesWS/Hercules/compare/v2023.12...v2024.02
 [v2023.12]: https://github.com/HerculesWS/Hercules/compare/v2023.11...v2023.12

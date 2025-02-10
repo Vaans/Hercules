@@ -2,7 +2,7 @@
  * This file is part of Hercules.
  * http://herc.ws - http://github.com/HerculesWS/Hercules
  *
- * Copyright (C) 2013-2024 Hercules Dev Team
+ * Copyright (C) 2013-2025 Hercules Dev Team
  *
  * Hercules is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -694,6 +694,12 @@ struct {
 	struct HPMHookPoint *HP_clif_decrypt_cmd_post;
 	struct HPMHookPoint *HP_clif_format_itemlink_pre;
 	struct HPMHookPoint *HP_clif_format_itemlink_post;
+	struct HPMHookPoint *HP_clif_format_navigation_pre;
+	struct HPMHookPoint *HP_clif_format_navigation_post;
+	struct HPMHookPoint *HP_clif_format_url_pre;
+	struct HPMHookPoint *HP_clif_format_url_post;
+	struct HPMHookPoint *HP_clif_format_tipbox_pre;
+	struct HPMHookPoint *HP_clif_format_tipbox_post;
 	struct HPMHookPoint *HP_clif_authok_pre;
 	struct HPMHookPoint *HP_clif_authok_post;
 	struct HPMHookPoint *HP_clif_auth_error_pre;
@@ -1158,8 +1164,10 @@ struct {
 	struct HPMHookPoint *HP_clif_produce_effect_post;
 	struct HPMHookPoint *HP_clif_devotion_pre;
 	struct HPMHookPoint *HP_clif_devotion_post;
-	struct HPMHookPoint *HP_clif_spiritball_pre;
-	struct HPMHookPoint *HP_clif_spiritball_post;
+	struct HPMHookPoint *HP_clif_soulballs_pre;
+	struct HPMHookPoint *HP_clif_soulballs_post;
+	struct HPMHookPoint *HP_clif_spiritballs_pre;
+	struct HPMHookPoint *HP_clif_spiritballs_post;
 	struct HPMHookPoint *HP_clif_spiritball_single_pre;
 	struct HPMHookPoint *HP_clif_spiritball_single_post;
 	struct HPMHookPoint *HP_clif_bladestop_pre;
@@ -1264,6 +1272,8 @@ struct {
 	struct HPMHookPoint *HP_clif_process_chat_message_post;
 	struct HPMHookPoint *HP_clif_process_whisper_message_pre;
 	struct HPMHookPoint *HP_clif_process_whisper_message_post;
+	struct HPMHookPoint *HP_clif_validate_message_pre;
+	struct HPMHookPoint *HP_clif_validate_message_post;
 	struct HPMHookPoint *HP_clif_wisexin_pre;
 	struct HPMHookPoint *HP_clif_wisexin_post;
 	struct HPMHookPoint *HP_clif_wisall_pre;
@@ -3526,6 +3536,8 @@ struct {
 	struct HPMHookPoint *HP_itemdb_reform_exists_post;
 	struct HPMHookPoint *HP_itemdb_in_group_pre;
 	struct HPMHookPoint *HP_itemdb_in_group_post;
+	struct HPMHookPoint *HP_itemdb_search_group_pre;
+	struct HPMHookPoint *HP_itemdb_search_group_post;
 	struct HPMHookPoint *HP_itemdb_group_item_pre;
 	struct HPMHookPoint *HP_itemdb_group_item_post;
 	struct HPMHookPoint *HP_itemdb_chain_item_pre;
@@ -5514,6 +5526,12 @@ struct {
 	struct HPMHookPoint *HP_pc_auto_exp_insurance_post;
 	struct HPMHookPoint *HP_pc_crimson_marker_clear_pre;
 	struct HPMHookPoint *HP_pc_crimson_marker_clear_post;
+	struct HPMHookPoint *HP_pc_is_own_skill_pre;
+	struct HPMHookPoint *HP_pc_is_own_skill_post;
+	struct HPMHookPoint *HP_pc_clear_existing_cloneskill_pre;
+	struct HPMHookPoint *HP_pc_clear_existing_cloneskill_post;
+	struct HPMHookPoint *HP_pc_clear_existing_reproduceskill_pre;
+	struct HPMHookPoint *HP_pc_clear_existing_reproduceskill_post;
 	struct HPMHookPoint *HP_libpcre_compile_pre;
 	struct HPMHookPoint *HP_libpcre_compile_post;
 	struct HPMHookPoint *HP_libpcre_study_pre;
@@ -6076,6 +6094,8 @@ struct {
 	struct HPMHookPoint *HP_script_buildin_instance_warpall_sub_post;
 	struct HPMHookPoint *HP_script_buildin_mobuseskill_sub_pre;
 	struct HPMHookPoint *HP_script_buildin_mobuseskill_sub_post;
+	struct HPMHookPoint *HP_script_format_navigation_pre;
+	struct HPMHookPoint *HP_script_format_navigation_post;
 	struct HPMHookPoint *HP_script_buildin_rodex_sendmail_sub_pre;
 	struct HPMHookPoint *HP_script_buildin_rodex_sendmail_sub_post;
 	struct HPMHookPoint *HP_script_cleanfloor_sub_pre;
@@ -6200,6 +6220,8 @@ struct {
 	struct HPMHookPoint *HP_skill_read_db_post;
 	struct HPMHookPoint *HP_skill_get_index_pre;
 	struct HPMHookPoint *HP_skill_get_index_post;
+	struct HPMHookPoint *HP_skill_get_index_sub_pre;
+	struct HPMHookPoint *HP_skill_get_index_sub_post;
 	struct HPMHookPoint *HP_skill_get_type_pre;
 	struct HPMHookPoint *HP_skill_get_type_post;
 	struct HPMHookPoint *HP_skill_get_hit_pre;
@@ -6988,6 +7010,8 @@ struct {
 	struct HPMHookPoint *HP_status_get_class_post;
 	struct HPMHookPoint *HP_status_get_lv_pre;
 	struct HPMHookPoint *HP_status_get_lv_post;
+	struct HPMHookPoint *HP_status_get_spiritballs_pre;
+	struct HPMHookPoint *HP_status_get_spiritballs_post;
 	struct HPMHookPoint *HP_status_get_def_pre;
 	struct HPMHookPoint *HP_status_get_def_post;
 	struct HPMHookPoint *HP_status_get_speed_pre;
@@ -7152,6 +7176,14 @@ struct {
 	struct HPMHookPoint *HP_status_calc_dex_post;
 	struct HPMHookPoint *HP_status_calc_luk_pre;
 	struct HPMHookPoint *HP_status_calc_luk_post;
+	struct HPMHookPoint *HP_status_calc_atk_percent_pre;
+	struct HPMHookPoint *HP_status_calc_atk_percent_post;
+	struct HPMHookPoint *HP_status_calc_matk_percent_pre;
+	struct HPMHookPoint *HP_status_calc_matk_percent_post;
+	struct HPMHookPoint *HP_status_calc_def_percent_pre;
+	struct HPMHookPoint *HP_status_calc_def_percent_post;
+	struct HPMHookPoint *HP_status_calc_mdef_percent_pre;
+	struct HPMHookPoint *HP_status_calc_mdef_percent_post;
 	struct HPMHookPoint *HP_status_calc_watk_pre;
 	struct HPMHookPoint *HP_status_calc_watk_post;
 	struct HPMHookPoint *HP_status_calc_matk_pre;
@@ -7196,6 +7228,8 @@ struct {
 	struct HPMHookPoint *HP_status_natural_heal_post;
 	struct HPMHookPoint *HP_status_natural_heal_timer_pre;
 	struct HPMHookPoint *HP_status_natural_heal_timer_post;
+	struct HPMHookPoint *HP_status_load_sc_type_pre;
+	struct HPMHookPoint *HP_status_load_sc_type_post;
 	struct HPMHookPoint *HP_status_readdb_job2_pre;
 	struct HPMHookPoint *HP_status_readdb_job2_post;
 	struct HPMHookPoint *HP_status_readdb_sizefix_pre;
@@ -7228,8 +7262,10 @@ struct {
 	struct HPMHookPoint *HP_status_maxhp_entry_compare_post;
 	struct HPMHookPoint *HP_status_read_unit_params_db_additional_pre;
 	struct HPMHookPoint *HP_status_read_unit_params_db_additional_post;
-	struct HPMHookPoint *HP_status_unit_params_destroy_pre;
-	struct HPMHookPoint *HP_status_unit_params_destroy_post;
+	struct HPMHookPoint *HP_status_unit_params_destroy_entry_pre;
+	struct HPMHookPoint *HP_status_unit_params_destroy_entry_post;
+	struct HPMHookPoint *HP_status_unit_params_clear_db_pre;
+	struct HPMHookPoint *HP_status_unit_params_clear_db_post;
 	struct HPMHookPoint *HP_status_copy_pre;
 	struct HPMHookPoint *HP_status_copy_post;
 	struct HPMHookPoint *HP_status_base_matk_min_pre;
@@ -8251,6 +8287,12 @@ struct {
 	int HP_clif_decrypt_cmd_post;
 	int HP_clif_format_itemlink_pre;
 	int HP_clif_format_itemlink_post;
+	int HP_clif_format_navigation_pre;
+	int HP_clif_format_navigation_post;
+	int HP_clif_format_url_pre;
+	int HP_clif_format_url_post;
+	int HP_clif_format_tipbox_pre;
+	int HP_clif_format_tipbox_post;
 	int HP_clif_authok_pre;
 	int HP_clif_authok_post;
 	int HP_clif_auth_error_pre;
@@ -8715,8 +8757,10 @@ struct {
 	int HP_clif_produce_effect_post;
 	int HP_clif_devotion_pre;
 	int HP_clif_devotion_post;
-	int HP_clif_spiritball_pre;
-	int HP_clif_spiritball_post;
+	int HP_clif_soulballs_pre;
+	int HP_clif_soulballs_post;
+	int HP_clif_spiritballs_pre;
+	int HP_clif_spiritballs_post;
 	int HP_clif_spiritball_single_pre;
 	int HP_clif_spiritball_single_post;
 	int HP_clif_bladestop_pre;
@@ -8821,6 +8865,8 @@ struct {
 	int HP_clif_process_chat_message_post;
 	int HP_clif_process_whisper_message_pre;
 	int HP_clif_process_whisper_message_post;
+	int HP_clif_validate_message_pre;
+	int HP_clif_validate_message_post;
 	int HP_clif_wisexin_pre;
 	int HP_clif_wisexin_post;
 	int HP_clif_wisall_pre;
@@ -11083,6 +11129,8 @@ struct {
 	int HP_itemdb_reform_exists_post;
 	int HP_itemdb_in_group_pre;
 	int HP_itemdb_in_group_post;
+	int HP_itemdb_search_group_pre;
+	int HP_itemdb_search_group_post;
 	int HP_itemdb_group_item_pre;
 	int HP_itemdb_group_item_post;
 	int HP_itemdb_chain_item_pre;
@@ -13071,6 +13119,12 @@ struct {
 	int HP_pc_auto_exp_insurance_post;
 	int HP_pc_crimson_marker_clear_pre;
 	int HP_pc_crimson_marker_clear_post;
+	int HP_pc_is_own_skill_pre;
+	int HP_pc_is_own_skill_post;
+	int HP_pc_clear_existing_cloneskill_pre;
+	int HP_pc_clear_existing_cloneskill_post;
+	int HP_pc_clear_existing_reproduceskill_pre;
+	int HP_pc_clear_existing_reproduceskill_post;
 	int HP_libpcre_compile_pre;
 	int HP_libpcre_compile_post;
 	int HP_libpcre_study_pre;
@@ -13633,6 +13687,8 @@ struct {
 	int HP_script_buildin_instance_warpall_sub_post;
 	int HP_script_buildin_mobuseskill_sub_pre;
 	int HP_script_buildin_mobuseskill_sub_post;
+	int HP_script_format_navigation_pre;
+	int HP_script_format_navigation_post;
 	int HP_script_buildin_rodex_sendmail_sub_pre;
 	int HP_script_buildin_rodex_sendmail_sub_post;
 	int HP_script_cleanfloor_sub_pre;
@@ -13757,6 +13813,8 @@ struct {
 	int HP_skill_read_db_post;
 	int HP_skill_get_index_pre;
 	int HP_skill_get_index_post;
+	int HP_skill_get_index_sub_pre;
+	int HP_skill_get_index_sub_post;
 	int HP_skill_get_type_pre;
 	int HP_skill_get_type_post;
 	int HP_skill_get_hit_pre;
@@ -14545,6 +14603,8 @@ struct {
 	int HP_status_get_class_post;
 	int HP_status_get_lv_pre;
 	int HP_status_get_lv_post;
+	int HP_status_get_spiritballs_pre;
+	int HP_status_get_spiritballs_post;
 	int HP_status_get_def_pre;
 	int HP_status_get_def_post;
 	int HP_status_get_speed_pre;
@@ -14709,6 +14769,14 @@ struct {
 	int HP_status_calc_dex_post;
 	int HP_status_calc_luk_pre;
 	int HP_status_calc_luk_post;
+	int HP_status_calc_atk_percent_pre;
+	int HP_status_calc_atk_percent_post;
+	int HP_status_calc_matk_percent_pre;
+	int HP_status_calc_matk_percent_post;
+	int HP_status_calc_def_percent_pre;
+	int HP_status_calc_def_percent_post;
+	int HP_status_calc_mdef_percent_pre;
+	int HP_status_calc_mdef_percent_post;
 	int HP_status_calc_watk_pre;
 	int HP_status_calc_watk_post;
 	int HP_status_calc_matk_pre;
@@ -14753,6 +14821,8 @@ struct {
 	int HP_status_natural_heal_post;
 	int HP_status_natural_heal_timer_pre;
 	int HP_status_natural_heal_timer_post;
+	int HP_status_load_sc_type_pre;
+	int HP_status_load_sc_type_post;
 	int HP_status_readdb_job2_pre;
 	int HP_status_readdb_job2_post;
 	int HP_status_readdb_sizefix_pre;
@@ -14785,8 +14855,10 @@ struct {
 	int HP_status_maxhp_entry_compare_post;
 	int HP_status_read_unit_params_db_additional_pre;
 	int HP_status_read_unit_params_db_additional_post;
-	int HP_status_unit_params_destroy_pre;
-	int HP_status_unit_params_destroy_post;
+	int HP_status_unit_params_destroy_entry_pre;
+	int HP_status_unit_params_destroy_entry_post;
+	int HP_status_unit_params_clear_db_pre;
+	int HP_status_unit_params_clear_db_post;
 	int HP_status_copy_pre;
 	int HP_status_copy_post;
 	int HP_status_base_matk_min_pre;

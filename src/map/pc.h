@@ -2,7 +2,7 @@
  * This file is part of Hercules.
  * http://herc.ws - http://github.com/HerculesWS/Hercules
  *
- * Copyright (C) 2012-2024 Hercules Dev Team
+ * Copyright (C) 2012-2025 Hercules Dev Team
  * Copyright (C) Athena Dev Teams
  *
  * Hercules is free software: you can redistribute it and/or modify
@@ -791,10 +791,13 @@ END_ZEROED_BLOCK;
 	#define pc_leftside_matk(sd) (status->base_matk(&(sd)->bl, status->get_status_data(&(sd)->bl), (sd)->status.base_level))
 	#define pc_rightside_matk(sd) ((sd)->battle_status.rhw.matk+(sd)->battle_status.lhw.matk+(sd)->bonus.ematk)
 #else
-	#define pc_leftside_atk(sd) ((sd)->battle_status.batk + (sd)->battle_status.rhw.atk + (sd)->battle_status.lhw.atk)
+	#define pc_leftside_atk(sd) (\
+		(((sd)->battle_status.batk + (sd)->battle_status.rhw.atk + (sd)->battle_status.lhw.atk)\
+		* (sd)->battle_status.atk_percent) / 100\
+	)
 	#define pc_rightside_atk(sd) ((sd)->battle_status.rhw.atk2 + (sd)->battle_status.lhw.atk2)
 	#define pc_leftside_def(sd) ((sd)->battle_status.def)
-	#define pc_rightside_def(sd) ((sd)->battle_status.def2)
+	#define pc_rightside_def(sd) (((sd)->battle_status.def2 * (sd)->battle_status.def_percent) / 100)
 	#define pc_leftside_mdef(sd) ((sd)->battle_status.mdef)
 	#define pc_rightside_mdef(sd) ( (sd)->battle_status.mdef2 - ((sd)->battle_status.vit>>1) )
 #define pc_leftside_matk(sd) (\
@@ -1280,6 +1283,10 @@ END_ZEROED_BLOCK; /* End */
 	bool (*auto_exp_insurance) (struct map_session_data *sd);
 
 	void (*crimson_marker_clear) (struct map_session_data *sd);
+
+	bool (*is_own_skill) (struct map_session_data *sd, uint16 skill_id);
+	void (*clear_existing_cloneskill) (struct map_session_data *sd, bool clear_vars);
+	void (*clear_existing_reproduceskill) (struct map_session_data *sd, bool clear_vars);
 };
 
 #ifdef HERCULES_CORE
