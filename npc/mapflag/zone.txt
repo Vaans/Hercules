@@ -78,6 +78,9 @@ prt_are_in	mapflag	zone	Izlude Battle Arena
 // Faceworm's Nest Instance ===========
 1@face	mapflag	zone	Memorial Dungeon
 
+// Morse's Cave ======
+1@rev	mapflag	zone	Memorial Dungeon
+
 //Towns
 alberta	mapflag	zone	Towns
 aldebaran	mapflag	zone	Towns
